@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panier - Zahra Diffusion</title>
+    <link rel="icon" type="image/png" href="../assets/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script defer src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <div data-component="navbar"></div>
+    
+    <!-- Breadcrumb -->
+    <div class="bg-sky-50 border-b border-sky-100">
+      <div class="container-zahra py-3">
+        <nav class="flex items-center gap-2 text-sm text-gray-600">
+          <a href="./home.html" class="hover:text-sky-600 transition">Accueil</a>
+          <i class="fas fa-chevron-right text-xs text-gray-400"></i>
+          <span class="text-sky-700 font-medium">Panier</span>
+        </nav>
+      </div>
+    </div>
+
+    <main class="container-zahra py-10">
+      <h1 class="mb-8 text-3xl font-bold text-gray-900">Votre Panier</h1>
+      
+      <div class="grid gap-8 lg:grid-cols-3">
+        <!-- Liste des articles -->
+        <div class="lg:col-span-2">
+          <div id="cart-items" class="space-y-4"></div>
+          
+          <!-- Message panier vide -->
+          <div id="empty-cart" class="hidden text-center py-12">
+            <i class="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-700">Votre panier est vide</h3>
+            <p class="text-gray-500 mt-2">Découvrez nos produits et ajoutez-les à votre panier</p>
+            <a href="./boutique.html" class="btn-primary mt-6 inline-block">
+              <i class="fas fa-shopping-bag mr-2"></i>Voir la boutique
+            </a>
+          </div>
+        </div>
+        
+        <!-- Résumé panier -->
+        <div class="lg:col-span-1">
+          <div class="premium-card p-6 sticky top-24">
+            <h2 class="mb-4 font-semibold text-gray-900">Résumé</h2>
+            
+            <div class="space-y-2 mb-4">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Sous-total</span>
+                <span id="subtotal" class="font-medium">0 DA</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Livraison</span>
+                <span id="shipping" class="font-medium text-green-600">Gratuit</span>
+              </div>
+            </div>
+            
+            <div class="mb-6 flex justify-between border-t border-sky-200 pt-4">
+              <span class="font-bold text-gray-900">Total</span>
+              <span id="cart-total" class="text-2xl font-bold text-sky-700">0 DA</span>
+            </div>
+            
+            <div class="mb-4 rounded-lg bg-sky-50 p-3">
+              <div class="flex items-start gap-2 text-xs text-sky-700">
+                <i class="fas fa-truck mt-0.5"></i>
+                <p>Livraison gratuite dès 5000 DA d'achat</p>
+              </div>
+            </div>
+            
+            <button id="checkout-btn" class="w-full btn-primary">
+              <i class="fas fa-lock mr-2"></i>Passer au paiement
+            </button>
+            
+            <a href="./boutique.html" class="mt-4 block text-center text-sm text-sky-600 hover:text-sky-700 transition">
+              <i class="fas fa-arrow-left mr-1"></i>Continuer mes achats
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div data-component="footer"></div>
+
+    <script type="module" src="../js/main.js"></script>
+    <script type="module" src="../js/translations.js"></script>
+    <script type="module" src="../js/checkout.js"></script>
+  </body>
+</html>

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paiement - Zahra Diffusion</title>
+    <link rel="icon" type="image/png" href="../assets/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script defer src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <div data-component="navbar"></div>
+    
+    <!-- Breadcrumb -->
+    <div class="bg-sky-50 border-b border-sky-100">
+      <div class="container-zahra py-3">
+        <nav class="flex items-center gap-2 text-sm text-gray-600">
+          <a href="./home.html" class="hover:text-sky-600 transition">Accueil</a>
+          <i class="fas fa-chevron-right text-xs text-gray-400"></i>
+          <a href="./panier.html" class="hover:text-sky-600 transition">Panier</a>
+          <i class="fas fa-chevron-right text-xs text-gray-400"></i>
+          <span class="text-sky-700 font-medium">Paiement</span>
+        </nav>
+      </div>
+    </div>
+
+    <main class="container-zahra py-10">
+      <h1 class="mb-8 text-3xl font-bold text-gray-900">Paiement sécurisé</h1>
+      
+      <div class="grid gap-8 lg:grid-cols-3">
+        <!-- Formulaire de paiement -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Informations de livraison -->
+          <section class="premium-card p-6">
+            <h2 class="mb-4 flex items-center gap-2 font-semibold text-gray-900">
+              <i class="fas fa-truck text-sky-600"></i>
+              Informations de livraison
+            </h2>
+            
+            <div class="grid gap-4 md:grid-cols-2">
+              <div>
+                <label class="mb-1 block text-sm font-medium text-gray-700">Nom complet *</label>
+                <input type="text" id="delivery-name" required class="w-full rounded-lg border border-sky-200 p-3 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition" placeholder="Votre nom et prénom" />
+              </div>
+              <div>
+                <label class="mb-1 block text-sm font-medium text-gray-700">Téléphone *</label>
+                <input type="tel" id="delivery-phone" required class="w-full rounded-lg border border-sky-200 p-3 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition" placeholder="+213 XXX XXX XXX" />
+              </div>
+              <div>
+                <label class="mb-1 block text-sm font-medium text-gray-700">Wilaya *</label>
+                <select id="delivery-wilaya" required class="w-full rounded-lg border border-sky-200 p-3 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition">
+                  <option value="">Sélectionnez une wilaya</option>
+                </select>
+              </div>
+              <div>
+                <label class="mb-1 block text-sm font-medium text-gray-700">Commune *</label>
+                <input type="text" id="delivery-city" required class="w-full rounded-lg border border-sky-200 p-3 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition" placeholder="Votre commune" />
+              </div>
+              <div class="md:col-span-2">
+                <label class="mb-1 block text-sm font-medium text-gray-700">Adresse complète *</label>
+                <textarea id="delivery-address" required rows="2" class="w-full rounded-lg border border-sky-200 p-3 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition" placeholder="Rue, numéro, immeuble, code postal..."></textarea>
+              </div>
+            </div>
+          </section>
+
+          <!-- Méthode de paiement -->
+          <section class="premium-card p-6">
+            <h2 class="mb-4 flex items-center gap-2 font-semibold text-gray-900">
+              <i class="fas fa-credit-card text-sky-600"></i>
+              Méthode de paiement
+            </h2>
+            
+            <div class="space-y-3">
+              <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-sky-200 p-4 transition hover:border-sky-300 hover:bg-sky-50">
+                <input type="radio" name="payment-method" value="ccp" class="w-4 h-4 text-sky-600" />
+                <div class="flex-1">
+                  <div class="flex items-center gap-2">
+                    <span class="font-medium">CCP (Chèque Postal)</span>
+                    <span class="rounded-full bg-sky-100 px-2 py-0.5 text-xs text-sky-700">Recommandé</span>
+                  </div>
+                  <p class="text-sm text-gray-500">Paiement par CCP via virement bancaire</p>
+                </div>
+                <i class="fas fa-university text-sky-600 text-xl"></i>
+              </label>
+              
+              <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-sky-200 p-4 transition hover:border-sky-300 hover:bg-sky-50">
+                <input type="radio" name="payment-method" value="card" class="w-4 h-4 text-sky-600" />
+                <div class="flex-1">
+                  <span class="font-medium">Carte Bancaire</span>
+                  <p class="text-sm text-gray-500">Visa, Mastercard, Edahabia</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="fab fa-cc-visa text-blue-600 text-2xl"></i>
+                  <i class="fab fa-cc-mastercard text-red-600 text-2xl"></i>
+                </div>
+              </label>
+              
+              <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-sky-200 p-4 transition hover:border-sky-300 hover:bg-sky-50">
+                <input type="radio" name="payment-method" value="cash" class="w-4 h-4 text-sky-600" />
+                <div class="flex-1">
+                  <span class="font-medium">Paiement à la livraison</span>
+                  <p class="text-sm text-gray-500">Espèces lors de la réception</p>
+                </div>
+                <i class="fas fa-money-bill-wave text-green-600 text-xl"></i>
+              </label>
+              
+              <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-sky-200 p-4 transition hover:border-sky-300 hover:bg-sky-50">
+                <input type="radio" name="payment-method" value="baridi" class="w-4 h-4 text-sky-600" />
+                <div class="flex-1">
+                  <span class="font-medium">BaridiMob</span>
+                  <p class="text-sm text-gray-500">Transfert mobile instantané</p>
+                </div>
+                <i class="fas fa-mobile-alt text-purple-600 text-xl"></i>
+              </label>
+            </div>
+          </section>
+
+          <!-- Informations supplémentaires -->
+          <section class="premium-card p-6">
+            <h2 class="mb-4 flex items-center gap-2 font-semibold text-gray-900">
+              <i class="fas fa-sticky-note text-sky-600"></i>
+              Instructions supplémentaires
+            </h2>
+            <textarea id="order-notes" rows="3" class="w-full rounded-lg border border-sky-200 p-3 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition" placeholder="Précisions pour la livraison, horaires de réception préférés..."></textarea>
+          </section>
+        </div>
+
+        <!-- Résumé de commande -->
+        <div class="lg:col-span-1">
+          <div class="premium-card p-6 sticky top-24">
+            <h2 class="mb-4 font-semibold text-gray-900">Résumé de commande</h2>
+            
+            <div id="order-items" class="mb-4 space-y-3">
+              <!-- Les articles seront chargés ici -->
+            </div>
+            
+            <div class="mb-4 space-y-2 border-t border-sky-100 pt-4">
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Sous-total</span>
+                <span id="subtotal" class="font-medium">0 DA</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Livraison</span>
+                <span id="shipping" class="font-medium">Calculé à l'étape suivante</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-gray-600">Réduction</span>
+                <span id="discount" class="font-medium text-green-600">0 DA</span>
+              </div>
+            </div>
+            
+            <div class="mb-6 flex justify-between border-t border-sky-200 pt-4">
+              <span class="font-bold text-gray-900">Total</span>
+              <span id="total" class="text-xl font-bold text-sky-700">0 DA</span>
+            </div>
+            
+            <div class="mb-6 rounded-lg bg-sky-50 p-3">
+              <div class="flex items-start gap-2 text-xs text-sky-700">
+                <i class="fas fa-shield-alt mt-0.5"></i>
+                <p>Paiement 100% sécurisé. Vos informations sont cryptées et protégées.</p>
+              </div>
+            </div>
+            
+            <button id="place-order" class="w-full btn-primary">
+              <i class="fas fa-lock mr-2"></i>Confirmer la commande
+            </button>
+            
+            <p class="mt-4 text-center text-xs text-gray-500">
+              En confirmant, vous acceptez nos <a href="#" class="text-sky-600 hover:underline">CGV</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div data-component="footer"></div>
+
+    <script type="module" src="../js/main.js"></script>
+    <script type="module" src="../js/translations.js"></script>
+    <script type="module" src="../js/payment.js"></script>
+  </body>
+</html>

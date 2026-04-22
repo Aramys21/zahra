@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accueil - Zahra Diffusion</title>
+    <link rel="icon" type="image/png" href="../assets/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script defer src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css" />
+    <noscript><style>#loader{display:none!important;}</style></noscript>
+  </head>
+  <body>
+    <div id="loader" class="loader-overlay"><div class="loader-dot"></div></div>
+    <div data-component="navbar"></div>
+
+    <main>
+      <section class="rose-gradient">
+        <div class="container-zahra grid items-center gap-10 py-20 md:grid-cols-2">
+          <div class="fade-in">
+            <p class="mb-4 inline-flex rounded-full bg-white px-4 py-1 text-sm text-rose-700" data-translate="collection_femme">Collection Femme</p>
+            <h1 class="text-4xl font-black leading-tight text-gray-900 md:text-5xl" data-translate="titre_accueil">
+              L'e-commerce premium inspiré de Zahra Diffusion
+            </h1>
+            <p class="mt-5 max-w-xl text-gray-600" data-translate="description_accueil">
+              Une sélection élégante de produits femme, maison et bien-être pour un quotidien moderne.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a class="btn-primary" href="./boutique.html" data-translate="decouvrir_produits">Découvrir nos produits</a>
+              <a class="btn-secondary" href="./auth.html" data-translate="creer_compte_accueil">Créer un compte</a>
+            </div>
+          </div>
+          <div class="fade-in scale-in premium-card overflow-hidden">
+            <img
+              class="h-[420px] w-full object-cover"
+              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80"
+              alt="Hero femme premium"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="container-zahra py-16">
+        <div class="mb-8 flex items-center justify-between slide-up">
+          <h2 class="text-2xl font-bold" data-translate="produits_populaires">Produits populaires</h2>
+          <a class="text-sm font-semibold text-rose-700" href="./boutique.html" data-translate="voir_tout">Voir tout</a>
+        </div>
+        <div id="popular-products" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"></div>
+      </section>
+
+      <section class="bg-sky-50 py-16">
+        <div class="container-zahra">
+          <h2 class="mb-8 text-2xl font-bold slide-up text-sky-900" data-translate="categories">Catégories</h2>
+          <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <a href="./boutique.html?category=Bebe" class="premium-card border-sky-200 p-6 text-sky-700 scale-in hover-lift">Bébé</a>
+            <a href="./boutique.html?category=Antibacterien" class="premium-card border-sky-200 p-6 text-sky-700 scale-in hover-lift">Antibactérien</a>
+            <a href="./boutique.html?category=Maison" class="premium-card border-sky-200 p-6 text-sky-700 scale-in hover-lift">Maison</a>
+            <a href="./boutique.html?category=Femme" class="premium-card border-sky-300 p-6 text-sky-800 scale-in hover-lift">Femme</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-gray-50 py-12">
+        <div class="container-zahra">
+          <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="flex flex-col items-center text-center">
+              <div class="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100 text-sky-600">
+                <i class="fas fa-truck text-2xl"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900">Livraison Rapide</h3>
+              <p class="mt-2 text-sm text-gray-600">Livraison en 24-48h partout en Algérie</p>
+            </div>
+            <div class="flex flex-col items-center text-center">
+              <div class="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-rose-100 text-rose-600">
+                <i class="fas fa-shield-alt text-2xl"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900">Paiement Sécurisé</h3>
+              <p class="mt-2 text-sm text-gray-600">Paiement 100% sécurisé et crypté</p>
+            </div>
+            <div class="flex flex-col items-center text-center">
+              <div class="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
+                <i class="fas fa-undo text-2xl"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900">Retour Gratuit</h3>
+              <p class="mt-2 text-sm text-gray-600">30 jours pour changer d'avis</p>
+            </div>
+            <div class="flex flex-col items-center text-center">
+              <div class="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                <i class="fas fa-headset text-2xl"></i>
+              </div>
+              <h3 class="font-semibold text-gray-900">Support 24/7</h3>
+              <p class="mt-2 text-sm text-gray-600">Assistance client disponible</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container-zahra py-16">
+        <h2 class="mb-8 text-2xl font-bold">Avis clients</h2>
+        <div class="grid gap-6 md:grid-cols-3">
+          <article class="premium-card p-6">
+            <div class="mb-3 flex text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p>"Qualité incroyable, livraison rapide et service top."</p>
+            <p class="mt-4 text-sm font-semibold text-rose-700">- Yasmine</p>
+          </article>
+          <article class="premium-card p-6">
+            <div class="mb-3 flex text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p>"Le design du site et les produits sont vraiment premium."</p>
+            <p class="mt-4 text-sm font-semibold text-rose-700">- Lina</p>
+          </article>
+          <article class="premium-card p-6">
+            <div class="mb-3 flex text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <p>"Je recommande, surtout la gamme femme."</p>
+            <p class="mt-4 text-sm font-semibold text-rose-700">- Sarah</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="bg-gray-50 py-16">
+        <div class="container-zahra">
+          <h2 class="mb-8 text-2xl font-bold slide-up">Blog & conseils</h2>
+          <div id="blog-preview" class="grid gap-6 md:grid-cols-3"></div>
+        </div>
+      </section>
+    </main>
+
+    <div data-component="footer"></div>
+
+    <script type="module" src="../js/main.js"></script>
+    <script type="module" src="../js/translations.js"></script>
+    <script type="module" src="../js/home.js"></script>
+  </body>
+</html>

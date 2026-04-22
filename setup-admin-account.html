@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Setup Admin Account</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        max-width: 500px;
+        width: 100%;
+      }
+      h1 {
+        color: #0c4a6e;
+        margin: 0 0 20px 0;
+      }
+      .status {
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        background: #f3f4f6;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        background: #0284c7;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0369a1;
+      }
+      button:disabled {
+        background: #9ca3af;
+        cursor: not-allowed;
+      }
+      .info {
+        margin-top: 20px;
+        padding: 15px;
+        background: #fef3c7;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Création Compte Admin</h1>
+      <div id="status" class="status">Prêt à créer le compte admin</div>
+      <button id="create-btn">Créer le compte admin</button>
+      <div class="info">
+        <strong>Informations du compte :</strong><br>
+        Email: bouachar37@gmail.com<br>
+        Mot de passe: azertyu
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const status = document.getElementById('status');
+        const createBtn = document.getElementById('create-btn');
+        
+        createBtn.addEventListener('click', async () => {
+          status.textContent = 'Création du compte en cours...';
+          status.style.background = '#fef3c7';
+          createBtn.disabled = true;
+          
+          try {
+            const response = await fetch('https://tnnupnnlmkktadmqhzey.supabase.co/auth/v1/signup', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRubnVwbm5sbWtrdGFkbXFoemV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjAzODYsImV4cCI6MjA5MTQ5NjM4Nn0.NYfitpneLZOLZ4hFqU-2caVeokP1MDhU1ACFTPw6cUU'
+              },
+              body: JSON.stringify({
+                email: 'bouachar37@gmail.com',
+                password: 'azertyu',
+                data: {
+                  first_name: 'Admin',
+                  last_name: 'Zahra',
+                  phone: '',
+                  address: '',
+                  wilaya: '',
+                  full_name: 'Admin Zahra'
+                }
+              })
+            });
+            
+            console.log('Status de la réponse:', response.status, response.statusText);
+            
+            const data = await response.json();
+            console.log('Données de la réponse:', data);
+            
+            if (response.ok) {
+              status.textContent = '✅ Compte admin créé avec succès ! Vous pouvez maintenant vous connecter avec admin/login.html';
+              status.style.background = '#d1fae5';
+              status.style.color = '#065f46';
+              createBtn.textContent = 'Compte créé';
+            } else {
+              const errorMsg = data.error_description || data.message || data.error || 'Erreur inconnue';
+              status.textContent = '❌ Erreur (' + response.status + '): ' + errorMsg;
+              status.style.background = '#fee2e2';
+              status.style.color = '#991b1b';
+              createBtn.disabled = false;
+            }
+          } catch (err) {
+            console.error('Erreur complète:', err);
+            status.textContent = '❌ Erreur de connexion: ' + err.message;
+            status.style.background = '#fee2e2';
+            status.style.color = '#991b1b';
+            createBtn.disabled = false;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

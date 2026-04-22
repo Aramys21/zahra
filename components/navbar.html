@@ -1,0 +1,95 @@
+<header class="fixed top-0 left-0 right-0 z-50 border-b border-sky-100 bg-white/95 backdrop-blur shadow-sm">
+  <div class="container-zahra">
+    <!-- Top bar avec infos pro -->
+    <div class="hidden border-b border-sky-50 bg-sky-50/50 py-2 text-xs md:flex">
+      <div class="flex items-center justify-between text-sky-700">
+        <div class="flex items-center gap-4">
+          <span><i class="fas fa-truck mr-1"></i> Livraison gratuite dès 50€</span>
+          <span><i class="fas fa-shield-alt mr-1"></i> Paiement sécurisé</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <span><i class="fas fa-phone mr-1"></i> +213 555 123 456</span>
+          <span><i class="fas fa-envelope mr-1"></i> contact@zahradiffusion.com</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main navigation -->
+    <div class="flex items-center justify-between py-4">
+      <a href="../pages/home.html" class="flex items-center gap-3">
+        <img
+          src="../assets/logo.png"
+          alt="Logo Zahra Diffusion"
+          class="h-12 w-auto"
+        />
+      </a>
+      
+      <!-- Search bar desktop -->
+      <div class="hidden flex-1 max-w-xl mx-8">
+        <div class="relative">
+          <input 
+            type="search" 
+            placeholder="Rechercher un produit..." 
+            class="w-full rounded-full border border-sky-200 bg-sky-50 px-5 py-2.5 text-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+          />
+          <button class="absolute right-3 top-1/2 -translate-y-1/2 text-sky-600 hover:text-sky-700">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+      
+      <nav class="hidden gap-6 text-sm font-medium md:flex">
+        <a class="transition hover:text-sky-600" href="../pages/home.html">Accueil</a>
+        <a class="transition hover:text-sky-600" href="../pages/boutique.html">Boutique</a>
+        <a class="transition hover:text-sky-600" href="../pages/home.html#categories">Catégories</a>
+        <a class="transition hover:text-sky-600" href="../pages/home.html#avis">Avis</a>
+      </nav>
+      
+      <div class="flex items-center gap-3">
+        <!-- Cart with badge -->
+        <a class="relative inline-flex items-center gap-2 transition hover:text-sky-600" href="../pages/panier.html">
+          <i class="fa-solid fa-cart-shopping text-lg"></i>
+          <span class="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-rose-600 text-xs text-white" id="cart-badge">0</span>
+        </a>
+        
+        <a class="inline-flex items-center gap-2 transition hover:text-sky-600" href="../pages/auth.html">
+          <i class="fa-regular fa-user text-lg"></i>
+        </a>
+        
+        <button id="lang-toggle" class="rounded-lg border border-sky-200 px-3 py-2 text-sm font-medium transition hover:bg-sky-50">
+          <i class="fas fa-globe mr-1"></i>
+          <span id="current-lang">FR</span>
+        </button>
+        
+        <button id="mobile-menu-btn" class="relative rounded-lg border border-sky-200 p-2 md:hidden group">
+          <div class="h-0.5 w-6 bg-sky-700 transition-all duration-300 group-hover:bg-sky-900"></div>
+          <div class="h-0.5 w-6 bg-sky-700 mt-1.5 transition-all duration-300 group-hover:bg-sky-900"></div>
+          <div class="h-0.5 w-6 bg-sky-700 mt-1.5 transition-all duration-300 group-hover:bg-sky-900"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden border-t border-sky-100 bg-white md:hidden transition-all duration-300 transform -translate-y-full opacity-0">
+    <div class="container-zahra grid gap-3 py-3 text-sm">
+      <!-- Search mobile -->
+      <div class="relative">
+        <input 
+          type="search" 
+          placeholder="Rechercher..." 
+          class="w-full rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-sm"
+        />
+        <button class="absolute right-3 top-1/2 -translate-y-1/2 text-sky-600">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      <a href="../pages/home.html">Accueil</a>
+      <a href="../pages/boutique.html">Boutique</a>
+      <a href="../pages/home.html#categories">Catégories</a>
+      <a href="../pages/home.html#avis">Avis</a>
+      <a class="inline-flex items-center gap-2" href="../pages/panier.html"><i class="fa-solid fa-cart-shopping"></i><span>Panier</span></a>
+      <a class="inline-flex items-center gap-2" href="../pages/auth.html"><i class="fa-regular fa-user"></i><span>Compte</span></a>
+    </div>
+  </div>
+</header>

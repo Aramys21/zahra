@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirmation - Zahra Diffusion</title>
+    <link rel="icon" type="image/png" href="../assets/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script defer src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <div data-component="navbar"></div>
+    
+    <main class="container-zahra py-16">
+      <div class="mx-auto max-w-2xl text-center">
+        <div class="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-green-100 text-green-600 mx-auto">
+          <i class="fas fa-check text-4xl"></i>
+        </div>
+        
+        <h1 class="mb-4 text-3xl font-bold text-gray-900">Commande confirmée !</h1>
+        <p class="mb-8 text-gray-600">
+          Merci pour votre commande. Vous recevrez un email de confirmation avec les détails de votre commande.
+        </p>
+        
+        <div class="premium-card p-6 mb-6 text-left">
+          <h2 class="mb-4 font-semibold text-gray-900">Détails de la commande</h2>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Numéro de commande</span>
+              <span id="order-number" class="font-medium">#-</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Date</span>
+              <span id="order-date" class="font-medium">-</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Total</span>
+              <span id="order-total" class="font-medium text-sky-700">-</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Méthode de paiement</span>
+              <span id="payment-method" class="font-medium">-</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-8 space-y-3">
+          <a href="./home.html" class="btn-primary inline-block">
+            <i class="fas fa-home mr-2"></i>Retour à l'accueil
+          </a>
+          <a href="./boutique.html" class="btn-secondary inline-block ml-3">
+            <i class="fas fa-shopping-bag mr-2"></i>Continuer mes achats
+          </a>
+        </div>
+        
+        <div class="rounded-lg bg-sky-50 p-4 text-left">
+          <div class="flex items-start gap-3">
+            <i class="fas fa-info-circle text-sky-600 mt-0.5"></i>
+            <div class="text-sm text-sky-700">
+              <p class="font-medium mb-1">Prochaines étapes :</p>
+              <ul class="list-disc list-inside space-y-1 text-gray-600">
+                <li>Vérifiez votre email pour la confirmation</li>
+                <li>Préparez votre paiement selon la méthode choisie</li>
+                <li>Notre équipe vous contactera pour la livraison</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div data-component="footer"></div>
+
+    <script type="module" src="../js/main.js"></script>
+    <script type="module" src="../js/translations.js"></script>
+    <script type="module" src="../js/confirmation.js"></script>
+  </body>
+</html>

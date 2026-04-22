@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connexion - Zahra Diffusion</title>
+    <link rel="icon" type="image/png" href="../assets/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script defer src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body class="bg-sky-50">
+    <div data-component="navbar"></div>
+    <main class="container-zahra py-14">
+      <div class="mx-auto max-w-md premium-card p-8">
+        <div class="text-center">
+          <h1 class="text-3xl font-bold text-sky-800">Connexion</h1>
+          <p class="mt-2 text-sm text-gray-600">Connectez-vous à votre compte Zahra Diffusion</p>
+        </div>
+
+        <form id="login-form" class="mt-8 space-y-6" novalidate>
+          <div>
+            <label for="login-email" class="mb-2 block text-sm font-medium text-gray-700">Email</label>
+            <input
+              id="login-email"
+              type="email"
+              name="email"
+              autocomplete="email"
+              class="w-full rounded-lg border border-sky-200 p-3 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              placeholder="votre@email.com"
+              required
+            />
+          </div>
+
+          <div>
+            <label for="login-password" class="mb-2 block text-sm font-medium text-gray-700">Mot de passe</label>
+            <input
+              id="login-password"
+              type="password"
+              name="password"
+              autocomplete="current-password"
+              class="w-full rounded-lg border border-sky-200 p-3 focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="btn-primary w-full py-3 text-lg font-semibold"
+          >
+            Se connecter
+          </button>
+        </form>
+
+        <div class="mt-6 text-center">
+          <p class="text-sm text-gray-600">
+            Pas encore de compte ?
+            <a href="./auth.html" class="font-semibold text-sky-700 hover:text-sky-800">
+              Créer un compte
+            </a>
+          </p>
+        </div>
+
+        <div id="login-status" class="mt-4 text-center text-sm"></div>
+      </div>
+    </main>
+    <div data-component="footer"></div>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="../js/main.js"></script>
+    <script type="module" src="../js/translations.js"></script>
+    <script type="module" src="../js/login.js"></script>
+  </body>
+</html>
