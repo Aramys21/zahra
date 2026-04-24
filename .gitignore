@@ -1,0 +1,40 @@
+# Dépendances
+node_modules/
+package-lock.json
+yarn.lock
+
+# Fichiers de configuration Supabase (contiennent des clés sensibles)
+supabase/.env*
+supabase/config.toml
+
+# Fichiers de logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Fichiers de build
+dist/
+build/
+.cache/
+
+# Fichiers de test
+test-orders.html
+test-orders-v2.html
+
+# Variables d'environnement
+.env
+.env.local
+.env.*.local

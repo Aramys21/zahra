@@ -67,8 +67,11 @@ function getInlineFallback(name, isInSubdir) {
           <nav class="hidden gap-6 text-sm font-medium md:flex">
             <a class="transition hover:text-sky-600" href="${base}/home.html">Accueil</a>
             <a class="transition hover:text-sky-600" href="${base}/boutique.html">Boutique</a>
+            <a class="inline-flex items-center gap-2 transition hover:text-sky-600" href="${base}/wishlist.html"><i class="fa-solid fa-heart"></i><span>Favoris</span></a>
             <a class="inline-flex items-center gap-2 transition hover:text-sky-600" href="${base}/panier.html"><i class="fa-solid fa-cart-shopping"></i><span>Panier</span></a>
-            <a class="inline-flex items-center gap-2 transition hover:text-sky-600" href="${base}/auth.html"><i class="fa-regular fa-user"></i><span>Compte</span></a>
+            <div id="auth-nav-desktop" class="inline-flex items-center gap-2">
+              <a class="inline-flex items-center gap-2 transition hover:text-sky-600" href="${base}/auth.html"><i class="fa-regular fa-user"></i><span>Compte</span></a>
+            </div>
           </nav>
           <button id="mobile-menu-btn" class="relative rounded-lg border border-sky-200 p-2 md:hidden group">
             <div class="h-0.5 w-6 bg-sky-700 transition-all duration-300 group-hover:bg-sky-900"></div>
@@ -80,8 +83,11 @@ function getInlineFallback(name, isInSubdir) {
           <div class="container-zahra grid gap-3 py-3 text-sm">
             <a href="${base}/home.html">Accueil</a>
             <a href="${base}/boutique.html">Boutique</a>
+            <a class="inline-flex items-center gap-2" href="${base}/wishlist.html"><i class="fa-solid fa-heart"></i><span>Favoris</span></a>
             <a class="inline-flex items-center gap-2" href="${base}/panier.html"><i class="fa-solid fa-cart-shopping"></i><span>Panier</span></a>
-            <a class="inline-flex items-center gap-2" href="${base}/auth.html"><i class="fa-regular fa-user"></i><span>Compte</span></a>
+            <div id="auth-nav-mobile">
+              <a class="inline-flex items-center gap-2" href="${base}/auth.html"><i class="fa-regular fa-user"></i><span>Compte</span></a>
+            </div>
           </div>
         </div>
       </header>
@@ -126,10 +132,16 @@ export function getCategoryTheme(category) {
 
 export function renderProductCard(product) {
   const theme = getCategoryTheme(product.category);
+  const isInSubdir = window.location.pathname.includes("/pages/");
+  const productPath = isInSubdir ? `product.html?id=${product.id}` : `pages/product.html?id=${product.id}`;
+  
   return `
     <article class="premium-card overflow-hidden group">
       <div class="relative h-56 overflow-hidden">
         <img src="${product.image}" alt="${product.name}" class="h-56 w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+        <button class="favorite-btn absolute top-2 right-2 bg-white/90 hover:bg-white rounded-full p-2 text-gray-400 hover:text-red-500 transition-colors shadow" data-id="${product.id}">
+          <i class="fas fa-heart"></i>
+        </button>
         <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
           <div class="text-center text-white">
             <p class="text-sm font-medium">${product.name}</p>
@@ -143,7 +155,7 @@ export function renderProductCard(product) {
         <div class="mt-4 flex items-center justify-between">
           <p class="font-bold ${theme.price}">${product.price} DA</p>
           <div class="flex gap-2">
-            <a class="rounded-lg border border-sky-200 px-3 py-2 text-xs" href="./produit.html?id=${product.id}">Détails</a>
+            <a class="rounded-lg border border-sky-200 px-3 py-2 text-xs" href="${productPath}">Détails</a>
             <button class="add-to-cart rounded-lg px-3 py-2 text-xs font-semibold text-white ${theme.button}" data-id="${product.id}">
               Ajouter au panier
             </button>

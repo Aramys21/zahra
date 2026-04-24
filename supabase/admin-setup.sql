@@ -17,6 +17,11 @@ CREATE TABLE IF NOT EXISTS profiles (
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
 -- Step 3: Create policies for profiles table
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Users can view own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+DROP POLICY IF EXISTS "Service role can manage all profiles" ON profiles;
+
 -- Allow users to view their own profile
 CREATE POLICY "Users can view own profile"
     ON profiles FOR SELECT

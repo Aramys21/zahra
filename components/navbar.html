@@ -1,19 +1,5 @@
 <header class="fixed top-0 left-0 right-0 z-50 border-b border-sky-100 bg-white/95 backdrop-blur shadow-sm">
   <div class="container-zahra">
-    <!-- Top bar avec infos pro -->
-    <div class="hidden border-b border-sky-50 bg-sky-50/50 py-2 text-xs md:flex">
-      <div class="flex items-center justify-between text-sky-700">
-        <div class="flex items-center gap-4">
-          <span><i class="fas fa-truck mr-1"></i> Livraison gratuite dès 50€</span>
-          <span><i class="fas fa-shield-alt mr-1"></i> Paiement sécurisé</span>
-        </div>
-        <div class="flex items-center gap-4">
-          <span><i class="fas fa-phone mr-1"></i> +213 555 123 456</span>
-          <span><i class="fas fa-envelope mr-1"></i> contact@zahradiffusion.com</span>
-        </div>
-      </div>
-    </div>
-    
     <!-- Main navigation -->
     <div class="flex items-center justify-between py-4">
       <a href="../pages/home.html" class="flex items-center gap-3">
@@ -52,9 +38,11 @@
           <span class="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-rose-600 text-xs text-white" id="cart-badge">0</span>
         </a>
         
-        <a class="inline-flex items-center gap-2 transition hover:text-sky-600" href="../pages/auth.html">
-          <i class="fa-regular fa-user text-lg"></i>
-        </a>
+        <div id="auth-nav-desktop">
+          <a class="inline-flex items-center gap-2 transition hover:text-sky-600" href="../pages/auth.html">
+            <i class="fa-regular fa-user text-lg"></i>
+          </a>
+        </div>
         
         <button id="lang-toggle" class="rounded-lg border border-sky-200 px-3 py-2 text-sm font-medium transition hover:bg-sky-50">
           <i class="fas fa-globe mr-1"></i>
@@ -89,7 +77,9 @@
       <a href="../pages/home.html#categories">Catégories</a>
       <a href="../pages/home.html#avis">Avis</a>
       <a class="inline-flex items-center gap-2" href="../pages/panier.html"><i class="fa-solid fa-cart-shopping"></i><span>Panier</span></a>
-      <a class="inline-flex items-center gap-2" href="../pages/auth.html"><i class="fa-regular fa-user"></i><span>Compte</span></a>
+      <div id="auth-nav-mobile">
+        <a class="inline-flex items-center gap-2" href="../pages/auth.html"><i class="fa-regular fa-user"></i><span>Compte</span></a>
+      </div>
     </div>
   </div>
 </header>

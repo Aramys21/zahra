@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Commandes - Admin Zahra Diffusion</title>
+    <link rel="icon" type="image/png" href="../assets/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script defer src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <!-- Admin Header -->
+    <header class="bg-white border-b border-gray-200 shadow-sm">
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <img src="../assets/logo.png" alt="Logo" class="h-10 w-auto" />
+            <h1 class="text-xl font-bold text-gray-900">Admin - Commandes</h1>
+          </div>
+          <a href="index.html" class="text-sky-600 hover:text-sky-700">
+            <i class="fas fa-arrow-left mr-2"></i>Retour
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+      <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-2xl font-bold text-gray-900">Liste des commandes</h2>
+        <button onclick="loadOrders()" class="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700 transition">
+          <i class="fas fa-sync-alt mr-2"></i>Actualiser
+        </button>
+      </div>
+
+      <div id="orders-container" class="space-y-4">
+        <div class="text-center py-12 text-gray-500">
+          <i class="fas fa-spinner fa-spin text-4xl mb-4"></i>
+          <p>Chargement des commandes...</p>
+        </div>
+      </div>
+    </main>
+
+    <script type="module">
+      import { createSupabaseClient } from "../supabase/client.js";
+
+      async function loadOrders() {
+        console.log('loadOrders appelé');
+        const container = document.getElementById('orders-container');
+        const client = await createSupabaseClient();
+        
+        if (!client) {
+          container.innerHTML = '<div class="text-center py-12 text-red-500">Erreur: Supabase non disponible</div>';
+          return;
+        }
+
+        const { data: orders, error } = await client
+          .from('orders')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        console.log('Commandes chargées:', orders);
+
+        if (error) {
+          container.innerHTML = `<div class="text-center py-12 text-red-500">Erreur: ${error.message}</div>`;
+          return;
+        }
+
+        if (!orders || orders.length === 0) {
+          container.innerHTML = '<div class="text-center py-12 text-gray-500">Aucune commande pour le moment</div>';
+          return;
+        }
+
+        container.innerHTML = orders.map(order => {
+          console.log('Génération HTML pour commande:', order.id);
+          return `
+          <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+            <div class="flex items-start justify-between mb-4">
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Commande #${order.id}</h3>
+                <p class="text-sm text-gray-500">${new Date(order.created_at).toLocaleString('fr-FR')}</p>
+              </div>
+              <span class="px-3 py-1 rounded-full text-sm font-medium ${
+                order.status === 'en attente' ? 'bg-yellow-100 text-yellow-800' :
+                order.status === 'confirmée' ? 'bg-green-100 text-green-800' :
+                order.status === 'expédiée' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+              }">
+                ${order.status || 'en attente'}
+              </span>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-2 mb-4">
+              <div>
+                <h4 class="font-medium text-gray-900 mb-2">Client</h4>
+                <p class="text-sm text-gray-600"><i class="fas fa-user mr-2"></i>${order.customer_name || 'N/A'}</p>
+                <p class="text-sm text-gray-600"><i class="fas fa-envelope mr-2"></i>${order.customer_email || 'N/A'}</p>
+                <p class="text-sm text-gray-600"><i class="fas fa-phone mr-2"></i>${order.customer_phone || 'N/A'}</p>
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-900 mb-2">Livraison</h4>
+                <p class="text-sm text-gray-600"><i class="fas fa-map-marker-alt mr-2"></i>${order.shipping_address || 'N/A'}</p>
+                <p class="text-sm text-gray-600"><i class="fas fa-map mr-2"></i>${order.shipping_wilaya || 'N/A'}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+              <p class="text-xl font-bold text-sky-700">Total: ${order.total ? order.total.toLocaleString() : '0'} DA</p>
+              <div class="flex gap-2">
+                <select onchange="updateOrderStatus(${order.id}, this.value)" class="border border-gray-300 rounded px-3 py-1 text-sm">
+                  <option value="en attente" ${order.status === 'en attente' ? 'selected' : ''}>En attente</option>
+                  <option value="confirmée" ${order.status === 'confirmée' ? 'selected' : ''}>Confirmée</option>
+                  <option value="expédiée" ${order.status === 'expédiée' ? 'selected' : ''}>Expédiée</option>
+                  <option value="annulée" ${order.status === 'annulée' ? 'selected' : ''}>Annulée</option>
+                </select>
+                <button onclick="deleteOrder(${order.id})" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        }).join('');
+      }
+
+      window.updateOrderStatus = async function(orderId, status) {
+        const client = await createSupabaseClient();
+        if (!client) return;
+
+        const { error } = await client
+          .from('orders')
+          .update({ status })
+          .eq('id', orderId);
+
+        if (error) {
+          alert('Erreur lors de la mise à jour: ' + error.message);
+        } else {
+          alert('Statut mis à jour avec succès');
+        }
+      };
+
+      window.deleteOrder = async function(orderId) {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette commande ?')) return;
+
+        const client = await createSupabaseClient();
+        if (!client) return;
+
+        const { error } = await client
+          .from('orders')
+          .delete()
+          .eq('id', orderId);
+
+        if (error) {
+          alert('Erreur lors de la suppression: ' + error.message);
+        } else {
+          alert('Commande supprimée avec succès');
+        }
+      };
+
+      window.loadOrders = loadOrders;
+      loadOrders();
+    </script>
+  </body>
+</html>

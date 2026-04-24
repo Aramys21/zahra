@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Insertion Blog</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .test {
+      margin: 20px 0;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    .success {
+      background: #d4edda;
+      border-color: #c3e6cb;
+      color: #155724;
+    }
+    .error {
+      background: #f8d7da;
+      border-color: #f5c6cb;
+      color: #721c24;
+    }
+    .info {
+      background: #d1ecf1;
+      border-color: #bee5eb;
+      color: #0c5460;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    pre {
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Test Insertion Blog</h1>
+    
+    <div class="test info">
+      <h3>Test 1 : Vérifier la connexion Supabase</h3>
+      <button onclick="testConnection()">Tester la connexion</button>
+      <div id="test1-result"></div>
+    </div>
+
+    <div class="test info">
+      <h3>Test 2 : Vérifier si la table blogs existe</h3>
+      <button onclick="testTableExists()">Vérifier la table</button>
+      <div id="test2-result"></div>
+    </div>
+
+    <div class="test info">
+      <h3>Test 3 : Lire les blogs existants</h3>
+      <button onclick="testReadBlogs()">Lire les blogs</button>
+      <div id="test3-result"></div>
+    </div>
+
+    <div class="test info">
+      <h3>Test 4 : Insérer un blog simple</h3>
+      <input type="text" id="test-title" value="Test Blog" placeholder="Titre">
+      <textarea id="test-excerpt" placeholder="Excerpt">Ceci est un test</textarea>
+      <button onclick="testInsertBlog()">Insérer un blog</button>
+      <div id="test4-result"></div>
+    </div>
+
+    <div class="test info">
+      <h3>Test 5 : Insérer avec données complètes</h3>
+      <input type="text" id="full-title" value="Blog Complet" placeholder="Titre">
+      <textarea id="full-excerpt" placeholder="Excerpt">Extrait complet du blog</textarea>
+      <textarea id="full-content" placeholder="Contenu">Contenu complet du blog avec plus de détails...</textarea>
+      <input type="text" id="full-author" value="Admin" placeholder="Auteur">
+      <button onclick="testInsertFullBlog()">Insérer blog complet</button>
+      <div id="test5-result"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = "https://tnnupnnlmkktadmqhzey.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRubnVwbm5sbWtrdGFkbXFoemV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjAzODYsImV4cCI6MjA5MTQ5NjM4Nn0.NYfitpneLZOLZ4hFqU-2caVeokP1MDhU1ACFTPw6cUU";
+
+    function showResult(elementId, message, isSuccess) {
+      const element = document.getElementById(elementId);
+      element.className = isSuccess ? 'success' : 'error';
+      element.innerHTML = `<pre>${JSON.stringify(message, null, 2)}</pre>`;
+    }
+
+    async function testConnection() {
+      try {
+        const client = supabase.createClient(supabaseUrl, supabaseKey);
+        showResult('test1-result', { message: 'Client créé avec succès', url: supabaseUrl }, true);
+      } catch (error) {
+        showResult('test1-result', { error: error.message }, false);
+      }
+    }
+
+    async function testTableExists() {
+      try {
+        const client = supabase.createClient(supabaseUrl, supabaseKey);
+        const { data, error } = await client.from('blogs').select('count', { count: 'exact', head: true });
+        
+        if (error) {
+          showResult('test2-result', { error: error.message, error_details: error }, false);
+        } else {
+          showResult('test2-result', { message: 'Table blogs existe', count: data }, true);
+        }
+      } catch (error) {
+        showResult('test2-result', { error: error.message }, false);
+      }
+    }
+
+    async function testReadBlogs() {
+      try {
+        const client = supabase.createClient(supabaseUrl, supabaseKey);
+        const { data, error } = await client.from('blogs').select('*').limit(5);
+        
+        if (error) {
+          showResult('test3-result', { error: error.message, error_details: error }, false);
+        } else {
+          showResult('test3-result', { message: 'Blogs lus avec succès', count: data.length, data }, true);
+        }
+      } catch (error) {
+        showResult('test3-result', { error: error.message }, false);
+      }
+    }
+
+    async function testInsertBlog() {
+      const title = document.getElementById('test-title').value;
+      const excerpt = document.getElementById('test-excerpt').value;
+      
+      try {
+        const client = supabase.createClient(supabaseUrl, supabaseKey);
+        const { data, error } = await client.from('blogs').insert([
+          { title, excerpt }
+        ]).select();
+        
+        if (error) {
+          showResult('test4-result', { error: error.message, error_details: error }, false);
+        } else {
+          showResult('test4-result', { message: 'Blog inséré avec succès', data }, true);
+        }
+      } catch (error) {
+        showResult('test4-result', { error: error.message, stack: error.stack }, false);
+      }
+    }
+
+    async function testInsertFullBlog() {
+      const title = document.getElementById('full-title').value;
+      const excerpt = document.getElementById('full-excerpt').value;
+      const content = document.getElementById('full-content').value;
+      const author = document.getElementById('full-author').value;
+      
+      try {
+        const client = supabase.createClient(supabaseUrl, supabaseKey);
+        const { data, error } = await client.from('blogs').insert([
+          { title, excerpt, content, author }
+        ]).select();
+        
+        if (error) {
+          showResult('test5-result', { error: error.message, error_details: error }, false);
+        } else {
+          showResult('test5-result', { message: 'Blog complet inséré avec succès', data }, true);
+        }
+      } catch (error) {
+        showResult('test5-result', { error: error.message, stack: error.stack }, false);
+      }
+    }
+  </script>
+</body>
+</html>

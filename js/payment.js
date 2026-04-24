@@ -33,7 +33,7 @@ function loadWilayas() {
 
 // Charger le résumé de commande
 async function loadOrderSummary() {
-    const cart = getCartDetailed();
+    const cart = await getCartDetailed();
     const orderItems = document.getElementById('order-items');
     
     if (orderItems && cart.length > 0) {
@@ -50,7 +50,7 @@ async function loadOrderSummary() {
             </div>
         `).join('');
         
-        const total = getCartTotal();
+        const total = await getCartTotal();
         document.getElementById('subtotal').textContent = `${total.toLocaleString()} DA`;
         document.getElementById('total').textContent = `${total.toLocaleString()} DA`;
         
@@ -113,15 +113,9 @@ async function handlePlaceOrder() {
     const wilaya = document.getElementById('delivery-wilaya').value;
     const city = document.getElementById('delivery-city').value;
     const address = document.getElementById('delivery-address').value;
-    const paymentMethod = document.querySelector('input[name="payment-method"]:checked')?.value;
     
     if (!name || !phone || !wilaya || !city || !address) {
         alert('Veuillez remplir tous les champs obligatoires');
-        return;
-    }
-    
-    if (!paymentMethod) {
-        alert('Veuillez choisir une méthode de paiement');
         return;
     }
     
@@ -140,20 +134,18 @@ async function handlePlaceOrder() {
     }
     
     // Créer la commande
+    const subtotal = await getCartTotal();
+    const shipping = calculateShippingAmount(subtotal);
+    const total = subtotal + shipping;
+    
     const order = {
         user_id: user.id,
-        items: cart,
-        total: getCartTotal(),
-        shipping: calculateShippingAmount(getCartTotal()),
-        delivery: {
-            name,
-            phone,
-            wilaya,
-            city,
-            address
-        },
-        paymentMethod,
-        notes: document.getElementById('order-notes').value,
+        customer_name: name,
+        customer_email: user.email,
+        customer_phone: phone,
+        shipping_address: `${address}, ${city}`,
+        shipping_wilaya: wilaya,
+        total: total,
         status: 'en attente'
     };
     
@@ -169,7 +161,7 @@ async function handlePlaceOrder() {
     localStorage.removeItem('zahra_cart_guest');
     
     // Afficher confirmation
-    alert('Commande confirmée ! Redirection...');
+    alert('Commande confirmée ! Notre équipe vous contactera par téléphone dans les plus brefs délais pour confirmer votre commande.');
     
     // Rediriger vers la page de confirmation
     setTimeout(() => {

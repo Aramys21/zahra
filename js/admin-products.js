@@ -1,45 +1,22 @@
-import { products } from "./data.js";
 import { createSupabaseClient } from "../supabase/client.js";
 
-const ADMIN_ALLOWED_HOSTS = ["admin.zahradiffusion.com", "localhost", "127.0.0.1", "www.zahra.dz", "zahra.dz"];
 const ADMIN_EMAILS = ["bouachar37@gmail.com"];
 
-// Variables globales pour les images
 let uploadedImages = [];
 
-// Initialiser quand le DOM est chargé
 document.addEventListener('DOMContentLoaded', async () => {
-  const ordersKpi = document.getElementById("kpi-orders");
-  const customersKpi = document.getElementById("kpi-customers");
-  const productsKpi = document.getElementById("kpi-products");
-  const ordersTable = document.getElementById("orders-table");
-  const accessStatus = document.getElementById("admin-access-status");
   const productForm = document.getElementById("product-form");
-  const blogForm = document.getElementById("blog-form");
+  const productsTable = document.getElementById("products-table");
+  const formTitle = document.getElementById("form-title");
+  const cancelEditBtn = document.getElementById("cancel-edit");
   
-  if (productsKpi) {
-    productsKpi.textContent = String(products.length);
-  }
-  
-  const currentHost = window.location.hostname.toLowerCase();
-  const isAllowedHost = ADMIN_ALLOWED_HOSTS.includes(currentHost);
-
-  if (!isAllowedHost) {
-    if (accessStatus) {
-      accessStatus.textContent = `Acces refuse: domaine non autorise (${currentHost}).`;
-    }
-    document.querySelectorAll("main section:not(#admin-access), main .grid").forEach((el) => {
-      if (!el.closest("#admin-access")) el.classList.add("hidden");
-    });
-  } else {
-    await checkAuthAndLoadAdmin(ordersKpi, customersKpi, productsKpi, ordersTable, accessStatus, productForm, blogForm);
-  }
+  await checkAuthAndLoadAdmin(productForm, productsTable, formTitle, cancelEditBtn);
 });
 
-async function checkAuthAndLoadAdmin(ordersKpi, customersKpi, productsKpi, ordersTable, accessStatus, productForm, blogForm) {
+async function checkAuthAndLoadAdmin(productForm, productsTable, formTitle, cancelEditBtn) {
   const client = await createSupabaseClient();
   if (!client) {
-    if (accessStatus) accessStatus.textContent = "Supabase non disponible";
+    alert("Supabase non disponible");
     return;
   }
   
@@ -48,68 +25,20 @@ async function checkAuthAndLoadAdmin(ordersKpi, customersKpi, productsKpi, order
   } = await client.auth.getUser();
   
   if (!user) {
-    if (accessStatus) accessStatus.textContent = "Vous devez vous connecter pour accéder à l'admin.";
-    window.location.href = "../pages/auth.html";
+    alert("Vous devez vous connecter pour accéder à l'admin.");
+    window.location.href = "../admin/login.html";
   } else if (!ADMIN_EMAILS.includes(user.email.toLowerCase())) {
-    if (accessStatus) accessStatus.textContent = "Accès refusé. Compte non autorisé pour l'entreprise.";
-    document.querySelectorAll("main section:not(#admin-access), main .grid").forEach((el) => {
-      if (!el.closest("#admin-access")) el.classList.add("hidden");
-    });
+    alert("Accès refusé. Compte non autorisé pour l'entreprise.");
+    window.location.href = "../pages/home.html";
   } else {
-    if (accessStatus) accessStatus.textContent = `Accès autorisé pour ${user.email}`;
-    const productsTable = document.getElementById("products-table");
-    await loadAdminData(client, ordersKpi, customersKpi, productsKpi, ordersTable, productsTable);
-    bindProductForm(client, productForm, ordersKpi, customersKpi, productsKpi, ordersTable, productsTable);
-    bindBlogForm(client, blogForm);
+    await loadProducts(client, productsTable);
+    bindProductForm(client, productForm, productsTable, formTitle, cancelEditBtn);
   }
 }
 
-async function loadAdminData(client, ordersKpi, customersKpi, productsKpi, ordersTable, productsTable) {
-  const { data: orders } = await client.from("orders").select("*").order("created_at", { ascending: false });
-  const { data: users } = await client.from("users").select("id");
-  const { data: dbProducts } = await client.from("products").select("*");
+async function loadProducts(client, productsTable) {
+  const { data: dbProducts } = await client.from("products").select("*").order("created_at", { ascending: false });
   
-  if (ordersKpi) ordersKpi.textContent = String(orders?.length || 0);
-  if (customersKpi) customersKpi.textContent = String(users?.length || 0);
-  if (productsKpi) productsKpi.textContent = String(dbProducts?.length || products.length);
-
-  if (ordersTable) {
-    ordersTable.innerHTML = orders && orders.length > 0 
-      ? orders.map(
-        (order) => `
-        <div class="flex flex-wrap items-center justify-between rounded-lg border border-sky-100 p-3">
-          <div class="flex-1">
-            <p class="font-semibold">Commande #${order.id}</p>
-            <p class="text-sm text-gray-500">Total: ${order.total} DA</p>
-            <p class="text-xs text-gray-400 mt-1">
-              ${order.customer_name ? `Client: ${order.customer_name}` : ''}
-              ${order.customer_phone ? ` | Tel: ${order.customer_phone}` : ''}
-            </p>
-            <p class="text-xs text-gray-400">
-              ${order.customer_email ? `Email: ${order.customer_email}` : ''}
-            </p>
-            <p class="text-xs text-gray-400">
-              ${order.shipping_address ? `Adresse: ${order.shipping_address}, ${order.shipping_wilaya}` : ''}
-            </p>
-          </div>
-          <select class="status-select rounded border border-sky-200 p-2 text-sm" data-id="${order.id}">
-            <option ${order.status === "en attente" ? "selected" : ""}>en attente</option>
-            <option ${order.status === "confirme" ? "selected" : ""}>confirme</option>
-            <option ${order.status === "en cours" ? "selected" : ""}>en cours</option>
-          </select>
-        </div>
-      `
-      ).join("")
-      : '<p class="text-sm text-gray-500">Aucune commande</p>';
-
-    document.querySelectorAll(".status-select").forEach((select) => {
-      select.addEventListener("change", async (event) => {
-        const id = Number(event.currentTarget.dataset.id);
-        await client.from("orders").update({ status: event.currentTarget.value }).eq("id", id);
-      });
-    });
-  }
-
   if (productsTable) {
     productsTable.innerHTML = dbProducts && dbProducts.length > 0 
       ? dbProducts.map(
@@ -140,37 +69,48 @@ async function loadAdminData(client, ordersKpi, customersKpi, productsKpi, order
         const id = Number(event.currentTarget.dataset.id);
         if (confirm("Êtes-vous sûr de vouloir supprimer ce produit ?")) {
           await client.from("products").delete().eq("id", id);
-          await loadAdminData(client, ordersKpi, customersKpi, productsKpi, ordersTable, productsTable);
+          await loadProducts(client, productsTable);
         }
       });
     });
 
     document.querySelectorAll(".edit-product-btn").forEach((button) => {
+      console.log("Attaching event listener to edit button", button);
       button.addEventListener("click", async (event) => {
+        console.log("Edit button clicked", event.currentTarget.dataset.id);
         const id = Number(event.currentTarget.dataset.id);
-        const product = dbProducts.find(p => p.id === id);
+        const { data: products, error } = await client.from("products").select("*").eq("id", id);
+        
+        if (error) {
+          console.error("Error fetching product:", error);
+          alert("Erreur lors du chargement du produit: " + error.message);
+          return;
+        }
+        
+        console.log("Product data:", products);
+        const product = products[0];
+        
         if (product) {
           document.getElementById("p-name").value = product.name;
           document.getElementById("p-category").value = product.category;
           document.getElementById("p-price").value = product.price;
           document.getElementById("p-description").value = product.description || "";
           
-          // Stocker l'ID du produit en cours d'édition
           document.getElementById("product-form").dataset.editId = id;
-          
-          // Changer le texte du bouton
+          formTitle.textContent = "Modifier le produit";
           const submitBtn = document.querySelector("#product-form button[type='submit']");
           submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Mettre à jour le produit';
+          cancelEditBtn.classList.remove("hidden");
           
-          // Scroller vers le formulaire
           document.getElementById("product-form").scrollIntoView({ behavior: 'smooth' });
+        } else {
+          alert("Produit non trouvé");
         }
       });
     });
   }
 }
 
-// Initialiser l'upload d'images
 function initImageUpload() {
   const uploadZone = document.getElementById('image-upload-zone');
   const fileInput = document.getElementById('p-images');
@@ -178,12 +118,10 @@ function initImageUpload() {
 
   if (!uploadZone || !fileInput) return;
 
-  // Clic sur la zone d'upload
   uploadZone.addEventListener('click', () => {
     fileInput.click();
   });
 
-  // Drag and drop
   uploadZone.addEventListener('dragover', (e) => {
     e.preventDefault();
     uploadZone.classList.add('border-sky-500', 'bg-sky-50');
@@ -199,31 +137,26 @@ function initImageUpload() {
     handleFiles(e.dataTransfer.files);
   });
 
-  // Sélection de fichiers
   fileInput.addEventListener('change', (e) => {
     handleFiles(e.target.files);
   });
 }
 
-// Gérer les fichiers uploadés
 function handleFiles(files) {
   const previewContainer = document.getElementById('image-preview');
   if (!previewContainer) return;
 
   Array.from(files).forEach(file => {
-    // Vérifier que c'est une image
     if (!file.type.startsWith('image/')) {
       alert('Veuillez sélectionner uniquement des images');
       return;
     }
 
-    // Vérifier la taille (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert('L\'image ne doit pas dépasser 5MB');
       return;
     }
 
-    // Lire et prévisualiser l'image
     const reader = new FileReader();
     reader.onload = (e) => {
       const imageData = {
@@ -238,7 +171,6 @@ function handleFiles(files) {
   });
 }
 
-// Afficher la prévisualisation d'une image
 function renderImagePreview(imageData, container) {
   const previewDiv = document.createElement('div');
   previewDiv.className = 'relative group';
@@ -251,13 +183,11 @@ function renderImagePreview(imageData, container) {
   container.appendChild(previewDiv);
 }
 
-// Supprimer une image de la prévisualisation
 window.removeImage = function(index) {
   uploadedImages.splice(index, 1);
   renderAllPreviews();
 };
 
-// Réafficher toutes les prévisualisations
 function renderAllPreviews() {
   const previewContainer = document.getElementById('image-preview');
   if (!previewContainer) return;
@@ -268,15 +198,15 @@ function renderAllPreviews() {
   });
 }
 
-function bindProductForm(client, productForm, ordersKpi, customersKpi, productsKpi, ordersTable, productsTable) {
+function bindProductForm(client, productForm, productsTable, formTitle, cancelEditBtn) {
   if (!productForm) return;
   
   initImageUpload();
   
   productForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    console.log("Form submitted");
     
-    // Convertir les images en base64 pour stockage
     const imagesBase64 = uploadedImages.map(img => img.base64);
     const primaryImage = imagesBase64.length > 0 ? imagesBase64[0] : '';
     
@@ -289,22 +219,26 @@ function bindProductForm(client, productForm, ordersKpi, customersKpi, productsK
       description: document.getElementById("p-description").value.trim()
     };
     
-    // Vérifier si c'est une édition ou un ajout
+    console.log("Payload:", payload);
+    
     const editId = productForm.dataset.editId;
+    console.log("Edit ID:", editId);
     
     let error;
     if (editId) {
-      // Mise à jour du produit existant
+      console.log("Updating product with ID:", editId);
       const result = await client.from("products").update(payload).eq("id", Number(editId));
       error = result.error;
       if (!error) {
         alert("Produit mis à jour avec succès !");
         delete productForm.dataset.editId;
+        formTitle.textContent = "Ajouter un produit";
         const submitBtn = document.querySelector("#product-form button[type='submit']");
         submitBtn.innerHTML = '<i class="fas fa-plus mr-2"></i>Ajouter produit';
+        cancelEditBtn.classList.add("hidden");
       }
     } else {
-      // Ajout d'un nouveau produit
+      console.log("Inserting new product");
       const result = await client.from("products").insert([payload]);
       error = result.error;
       if (!error) {
@@ -313,34 +247,24 @@ function bindProductForm(client, productForm, ordersKpi, customersKpi, productsK
     }
     
     if (error) {
+      console.error("Error:", error);
       alert("Erreur: " + error.message);
     } else {
       productForm.reset();
       uploadedImages = [];
       renderAllPreviews();
-      await loadAdminData(client, ordersKpi, customersKpi, productsKpi, ordersTable, productsTable);
+      await loadProducts(client, productsTable);
     }
   });
-}
 
-function bindBlogForm(client, blogForm) {
-  if (!blogForm) return;
-  
-  blogForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const payload = {
-      title: document.getElementById("b-title").value.trim(),
-      excerpt: document.getElementById("b-excerpt").value.trim()
-    };
-    
-    // Sauvegarder dans Supabase
-    const { error } = await client.from("blogs").insert([payload]);
-    
-    if (error) {
-      alert("Erreur lors de la publication: " + error.message);
-    } else {
-      alert("Article publié.");
-      blogForm.reset();
-    }
+  cancelEditBtn.addEventListener("click", () => {
+    delete productForm.dataset.editId;
+    formTitle.textContent = "Ajouter un produit";
+    const submitBtn = document.querySelector("#product-form button[type='submit']");
+    submitBtn.innerHTML = '<i class="fas fa-plus mr-2"></i>Ajouter produit';
+    cancelEditBtn.classList.add("hidden");
+    productForm.reset();
+    uploadedImages = [];
+    renderAllPreviews();
   });
 }

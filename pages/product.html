@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Détails du produit - Zahra Diffusion</title>
+    <link rel="icon" type="image/png" href="../assets/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script defer src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body class="bg-gray-50">
+    <div data-component="navbar"></div>
+    <main class="container-zahra py-10">
+      <div id="product-loading" class="text-center py-20">
+        <i class="fas fa-spinner fa-spin text-4xl text-sky-500"></i>
+        <p class="mt-4 text-gray-600">Chargement du produit...</p>
+      </div>
+      
+      <div id="product-detail" class="hidden">
+        <a href="home.html" class="btn-secondary inline-block mb-6">
+          <i class="fas fa-arrow-left mr-2"></i>Retour
+        </a>
+        
+        <div class="grid gap-8 lg:grid-cols-2">
+          <div>
+            <div id="product-images" class="grid grid-cols-1 gap-4"></div>
+          </div>
+          
+          <div>
+            <h1 id="product-name" class="text-3xl font-bold"></h1>
+            <p id="product-category" class="mt-2 text-sky-600 font-semibold"></p>
+            <p id="product-price" class="mt-4 text-2xl font-black text-sky-700"></p>
+            
+            <div class="mt-6">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Quantité</label>
+              <div class="flex items-center gap-3">
+                <button id="qty-minus" class="btn-secondary px-3 py-2">-</button>
+                <input id="product-qty" type="number" value="1" min="1" class="w-20 text-center rounded-lg border border-sky-200 p-2" />
+                <button id="qty-plus" class="btn-secondary px-3 py-2">+</button>
+              </div>
+            </div>
+            
+            <button id="add-to-cart-btn" class="btn-primary w-full mt-6 py-3">
+              <i class="fas fa-shopping-cart mr-2"></i>Ajouter au panier
+            </button>
+            
+            <div class="mt-8">
+              <h3 class="font-semibold mb-2">Description</h3>
+              <p id="product-description" class="text-gray-600"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="mt-10 premium-card p-6">
+        <h2 class="text-xl font-semibold mb-4">Avis clients</h2>
+        <div id="reviews-list" class="space-y-4"></div>
+        <div id="review-form-container" class="mt-6 hidden">
+          <h3 class="font-semibold mb-3">Ajouter un avis</h3>
+          <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Note</label>
+            <div id="rating-stars" class="flex gap-1">
+              <button type="button" class="star-btn text-2xl text-gray-300 hover:text-yellow-400" data-rating="1">★</button>
+              <button type="button" class="star-btn text-2xl text-gray-300 hover:text-yellow-400" data-rating="2">★</button>
+              <button type="button" class="star-btn text-2xl text-gray-300 hover:text-yellow-400" data-rating="3">★</button>
+              <button type="button" class="star-btn text-2xl text-gray-300 hover:text-yellow-400" data-rating="4">★</button>
+              <button type="button" class="star-btn text-2xl text-gray-300 hover:text-yellow-400" data-rating="5">★</button>
+            </div>
+            <input type="hidden" id="review-rating" value="0" />
+          </div>
+          <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Commentaire</label>
+            <textarea id="review-comment" class="w-full rounded-lg border border-sky-200 p-2" rows="3" placeholder="Partagez votre expérience..."></textarea>
+          </div>
+          <button id="submit-review" class="btn-primary">Publier l'avis</button>
+        </div>
+        <div id="login-to-review" class="mt-6 hidden">
+          <p class="text-gray-600 mb-3">Connectez-vous pour laisser un avis</p>
+          <a href="auth.html" class="btn-primary inline-block">Se connecter</a>
+        </div>
+      </section>
+
+      <section class="mt-10">
+        <h2 class="text-xl font-semibold mb-4">Produits similaires</h2>
+        <div id="similar-products" class="grid gap-6 md:grid-cols-2 lg:grid-cols-4"></div>
+      </section>
+      
+      <div id="product-error" class="hidden text-center py-20">
+        <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
+        <p class="mt-4 text-gray-600">Produit non trouvé</p>
+        <a href="home.html" class="btn-primary inline-block mt-4">Retour à l'accueil</a>
+      </div>
+    </main>
+    <div data-component="footer"></div>
+    <script type="module" src="../js/main.js"></script>
+    <script type="module" src="../js/product.js"></script>
+  </body>
+</html>

@@ -1,16 +1,21 @@
-import { getCartDetailed, getCartTotal, removeFromCart, updateQuantity, getLocalCart, setLocalCart, mergeCartAfterLogin } from "./cart.js";
+import { getCartDetailed, getCartTotal, removeFromCart, updateQuantity, getLocalCart, setLocalCart, mergeCartAfterLogin, updateCartBadge } from "./cart.js";
 import { updateLanguageUI } from "./translations.js";
 import { createSupabaseClient } from "../supabase/client.js";
 
-const list = document.getElementById("cart-list");
+const list = document.getElementById("cart-items");
 const totalEl = document.getElementById("cart-total");
+const subtotalEl = document.getElementById("subtotal");
+const emptyCartEl = document.getElementById("empty-cart");
 const checkoutButton = document.getElementById("checkout-btn");
 
-function renderCart() {
-  const items = getCartDetailed().filter((item) => item.product);
+async function renderCart() {
+  const items = await getCartDetailed();
+  
   if (!items.length) {
-    list.innerHTML = `<p class="text-gray-500">Votre panier est vide.</p>`;
+    list.innerHTML = "";
+    emptyCartEl?.classList.remove("hidden");
   } else {
+    emptyCartEl?.classList.add("hidden");
     list.innerHTML = items
       .map(
         (item) => `
@@ -27,21 +32,26 @@ function renderCart() {
       .join("");
   }
 
-  totalEl.textContent = `${getCartTotal()} DA`;
+  const total = await getCartTotal();
+  totalEl.textContent = `${total.toLocaleString()} DA`;
+  subtotalEl.textContent = `${total.toLocaleString()} DA`;
   bindCartActions();
 }
 
 function bindCartActions() {
   document.querySelectorAll(".remove-btn").forEach((btn) =>
-    btn.addEventListener("click", (event) => {
+    btn.addEventListener("click", async (event) => {
       removeFromCart(Number(event.currentTarget.dataset.id));
-      renderCart();
+      await renderCart();
     })
   );
   document.querySelectorAll(".qty-input").forEach((input) =>
-    input.addEventListener("change", (event) => {
-      updateQuantity(Number(event.currentTarget.dataset.id), Number(event.currentTarget.value));
-      renderCart();
+    input.addEventListener("input", async (event) => {
+      const newQuantity = Number(event.currentTarget.value);
+      if (newQuantity >= 1) {
+        updateQuantity(Number(event.currentTarget.dataset.id), newQuantity);
+        await renderCart();
+      }
     })
   );
 }
@@ -70,3 +80,4 @@ checkoutButton?.addEventListener("click", async () => {
 
 renderCart();
 updateLanguageUI();
+updateCartBadge();

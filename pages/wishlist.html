@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mes favoris - Zahra Diffusion</title>
+    <link rel="icon" type="image/png" href="../assets/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script defer src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body class="bg-gray-50">
+    <div data-component="navbar"></div>
+    <main class="container-zahra py-10">
+      <h1 class="text-3xl font-bold mb-6">Mes favoris</h1>
+      
+      <div id="wishlist-loading" class="text-center py-20">
+        <i class="fas fa-spinner fa-spin text-4xl text-sky-500"></i>
+        <p class="mt-4 text-gray-600">Chargement...</p>
+      </div>
+      
+      <div id="wishlist-empty" class="hidden text-center py-20">
+        <i class="fas fa-heart text-6xl text-gray-300"></i>
+        <p class="mt-4 text-gray-600">Vous n'avez pas encore de favoris</p>
+        <a href="boutique.html" class="btn-primary inline-block mt-4">Découvrir nos produits</a>
+      </div>
+      
+      <div id="wishlist-grid" class="hidden grid gap-6 md:grid-cols-2 lg:grid-cols-4"></div>
+      
+      <div id="login-required" class="hidden text-center py-20">
+        <i class="fas fa-lock text-6xl text-gray-300"></i>
+        <p class="mt-4 text-gray-600">Connectez-vous pour voir vos favoris</p>
+        <a href="auth.html" class="btn-primary inline-block mt-4">Se connecter</a>
+      </div>
+    </main>
+    <div data-component="footer"></div>
+    <script type="module" src="../js/main.js"></script>
+    <script type="module" src="../js/wishlist.js"></script>
+  </body>
+</html>

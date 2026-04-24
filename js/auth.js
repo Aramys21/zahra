@@ -108,29 +108,48 @@ function initializeAuthElements() {
   }
 
   if (signInBtn) {
+    console.log("Event listener attaché au bouton de connexion");
     signInBtn.addEventListener("click", async () => {
+      console.log("Bouton de connexion cliqué");
       const client = await initSupabase();
       if (!client) {
+        console.error("Supabase client non disponible");
         if (status) status.textContent = "Supabase n'est pas disponible";
         return;
       }
       
+      const email = emailEl.value.trim();
+      const password = passwordEl.value;
+      console.log("Tentative de connexion avec:", email);
+      
       const { error } = await client.auth.signInWithPassword({
-        email: emailEl.value.trim(),
-        password: passwordEl.value
+        email,
+        password
       });
       if (error) {
+        console.error("Erreur de connexion:", error);
         if (status) status.textContent = error.message;
       } else {
+        console.log("Connexion réussie");
         const {
           data: { user }
         } = await client.auth.getUser();
+        console.log("Utilisateur:", user);
         if (user) await syncUserRow(user, client);
         await mergeCartAfterLogin();
         if (status) status.textContent = t("connexion_reussie");
+        
+        // Rediriger vers la page d'accueil après connexion
+        console.log("Redirection vers home.html dans 1 seconde...");
+        setTimeout(() => {
+          console.log("Redirection maintenant...");
+          window.location.href = "./home.html";
+        }, 1000);
       }
       refreshStatus();
     });
+  } else {
+    console.error("Bouton de connexion non trouvé");
   }
 
   if (signOutBtn) {
