@@ -71,8 +71,37 @@
           return;
         }
 
+        // Charger les items pour chaque commande
+        const orderIds = orders.map(o => o.id);
+        let itemsByOrder = {};
+        
+        try {
+          const { data: orderItems, error: itemsError } = await client
+            .from('order_items')
+            .select('*')
+            .in('order_id', orderIds);
+
+          if (itemsError) {
+            console.error('Erreur chargement items (table peut ne pas exister):', itemsError);
+            // Continuer sans les items
+          } else if (orderItems) {
+            // Grouper les items par order_id
+            orderItems.forEach(item => {
+              if (!itemsByOrder[item.order_id]) {
+                itemsByOrder[item.order_id] = [];
+              }
+              itemsByOrder[item.order_id].push(item);
+            });
+          }
+        } catch (e) {
+          console.error('Exception lors du chargement des items:', e);
+          // Continuer sans les items
+        }
+
         container.innerHTML = orders.map(order => {
           console.log('Génération HTML pour commande:', order.id);
+          const items = itemsByOrder[order.id] || [];
+          
           return `
           <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
             <div class="flex items-start justify-between mb-4">
@@ -102,6 +131,23 @@
                 <p class="text-sm text-gray-600"><i class="fas fa-map-marker-alt mr-2"></i>${order.shipping_address || 'N/A'}</p>
                 <p class="text-sm text-gray-600"><i class="fas fa-map mr-2"></i>${order.shipping_wilaya || 'N/A'}</p>
               </div>
+            </div>
+
+            <div class="mb-4">
+              <h4 class="font-medium text-gray-900 mb-2">Produits commandés</h4>
+              ${items.length > 0 ? `
+                <div class="bg-gray-50 rounded-lg p-4">
+                  ${items.map(item => `
+                    <div class="flex items-center justify-between py-2 border-b border-gray-200 last:border-0">
+                      <div>
+                        <p class="text-sm font-medium text-gray-900">${item.product_name}</p>
+                        <p class="text-xs text-gray-500">Quantité: ${item.quantity} × ${item.product_price?.toLocaleString() || '0'} DA</p>
+                      </div>
+                      <p class="text-sm font-semibold text-sky-700">${item.subtotal?.toLocaleString() || '0'} DA</p>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : '<p class="text-sm text-gray-500">Aucun produit</p>'}
             </div>
 
             <div class="flex items-center justify-between pt-4 border-t border-gray-200">

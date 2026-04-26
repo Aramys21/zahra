@@ -85,15 +85,21 @@ function calculateShipping(total) {
 function setupPaymentForm() {
     const placeOrderBtn = document.getElementById('place-order');
     
+    console.log('setupPaymentForm appelé, bouton trouvé:', !!placeOrderBtn);
+    
     if (placeOrderBtn) {
-        placeOrderBtn.addEventListener('click', handlePlaceOrder);
+        placeOrderBtn.addEventListener('click', (e) => {
+            console.log('Bouton commander cliqué');
+            e.preventDefault();
+            handlePlaceOrder();
+        });
     }
     
     // Mettre à jour les frais de livraison quand la wilaya change
     const wilayaSelect = document.getElementById('delivery-wilaya');
     if (wilayaSelect) {
-        wilayaSelect.addEventListener('change', () => {
-            const total = getCartTotal();
+        wilayaSelect.addEventListener('change', async () => {
+            const total = await getCartTotal();
             calculateShipping(total);
         });
     }
@@ -101,11 +107,14 @@ function setupPaymentForm() {
 
 // Gérer la commande
 async function handlePlaceOrder() {
+    console.log('handlePlaceOrder appelé');
     const client = await createSupabaseClient();
     if (!client) {
         alert('Erreur: Supabase non disponible');
         return;
     }
+    
+    console.log('Client Supabase disponible');
     
     // Validation du formulaire
     const name = document.getElementById('delivery-name').value;
@@ -114,12 +123,16 @@ async function handlePlaceOrder() {
     const city = document.getElementById('delivery-city').value;
     const address = document.getElementById('delivery-address').value;
     
+    console.log('Données formulaire:', { name, phone, wilaya, city, address });
+    
     if (!name || !phone || !wilaya || !city || !address) {
         alert('Veuillez remplir tous les champs obligatoires');
         return;
     }
     
-    const cart = getCartDetailed();
+    const cart = await getCartDetailed();
+    console.log('Panier:', cart);
+    
     if (cart.length === 0) {
         alert('Votre panier est vide');
         return;
@@ -127,6 +140,8 @@ async function handlePlaceOrder() {
     
     // Get user ID
     const { data: { user } } = await client.auth.getUser();
+    console.log('Utilisateur:', user);
+    
     if (!user) {
         alert('Vous devez être connecté pour commander');
         window.location.href = './auth.html';
@@ -150,10 +165,29 @@ async function handlePlaceOrder() {
     };
     
     // Sauvegarder la commande dans Supabase
-    const { error } = await client.from("orders").insert([order]);
+    const { data: orderData, error: orderError } = await client.from("orders").insert([order]).select();
     
-    if (error) {
-        alert('Erreur lors de la commande: ' + error.message);
+    if (orderError) {
+        alert('Erreur lors de la commande: ' + orderError.message);
+        return;
+    }
+    
+    const orderId = orderData[0].id;
+    
+    // Sauvegarder les produits de la commande dans order_items
+    const orderItems = cart.map(item => ({
+        order_id: orderId,
+        product_id: item.product.id,
+        product_name: item.product.name,
+        product_price: item.product.price,
+        quantity: item.quantity,
+        subtotal: item.product.price * item.quantity
+    }));
+    
+    const { error: itemsError } = await client.from("order_items").insert(orderItems);
+    
+    if (itemsError) {
+        alert('Erreur lors de l\'enregistrement des produits: ' + itemsError.message);
         return;
     }
     

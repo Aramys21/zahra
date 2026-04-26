@@ -155,9 +155,11 @@ export function renderProductCard(product) {
         <div class="mt-4 flex items-center justify-between">
           <p class="font-bold ${theme.price}">${product.price} DA</p>
           <div class="flex gap-2">
-            <a class="rounded-lg border border-sky-200 px-3 py-2 text-xs" href="${productPath}">Détails</a>
-            <button class="add-to-cart rounded-lg px-3 py-2 text-xs font-semibold text-white ${theme.button}" data-id="${product.id}">
-              Ajouter au panier
+            <a class="details-btn rounded-lg px-4 py-2 text-xs font-semibold text-sky-600 bg-sky-50 hover:bg-sky-100 transition-all duration-300 hover:scale-105 hover:shadow-md" href="${productPath}">
+              <i class="fas fa-eye mr-1"></i>Détails
+            </a>
+            <button class="add-to-cart rounded-lg px-4 py-2 text-xs font-semibold text-white ${theme.button} transition-all duration-300 hover:scale-105 hover:shadow-md" data-id="${product.id}">
+              <i class="fas fa-cart-plus mr-1"></i>Ajouter
             </button>
           </div>
         </div>

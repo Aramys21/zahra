@@ -18,16 +18,19 @@
       <section class="rose-gradient">
         <div class="container-zahra grid items-center gap-10 py-20 md:grid-cols-2">
           <div class="fade-in">
-            <p class="mb-4 inline-flex rounded-full bg-white px-4 py-1 text-sm text-rose-700" data-translate="collection_femme">Collection Femme</p>
-            <h1 class="text-4xl font-black leading-tight text-gray-900 md:text-5xl" data-translate="titre_accueil">
-              L'e-commerce premium inspiré de Zahra Diffusion
+            <p class="mb-4 inline-flex rounded-full bg-white px-4 py-1 text-sm text-rose-700">Lingettes Premium</p>
+            <h1 class="text-4xl font-black leading-tight text-gray-900 md:text-5xl">
+              Vos lingettes premium pour
+              <span class="text-sky-600 inline-block">
+                <span id="animated-word" class="inline-block transition-all duration-500">Nettoyage</span>
+              </span>
             </h1>
-            <p class="mt-5 max-w-xl text-gray-600" data-translate="description_accueil">
-              Une sélection élégante de produits femme, maison et bien-être pour un quotidien moderne.
+            <p class="mt-5 max-w-xl text-gray-600">
+              Des lingettes de haute qualité pour un nettoyage efficace et une hygiène impeccable au quotidien.
             </p>
             <div class="mt-8 flex flex-wrap gap-3">
-              <a class="btn-primary" href="./boutique.html" data-translate="decouvrir_produits">Découvrir nos produits</a>
-              <a class="btn-secondary" href="./auth.html" data-translate="creer_compte_accueil">Créer un compte</a>
+              <a class="btn-primary" href="./boutique.html">Découvrir nos produits</a>
+              <a class="btn-secondary" href="./auth.html">Créer un compte</a>
             </div>
           </div>
           <div class="fade-in scale-in premium-card overflow-hidden">
@@ -147,5 +150,59 @@
     <script type="module" src="../js/main.js"></script>
     <script type="module" src="../js/translations.js"></script>
     <script type="module" src="../js/home.js"></script>
+    <script>
+      // Animation de changement de mots
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('Animation script loaded');
+        const words = ['Nettoyage', 'Hygiène', 'Maison', 'Bureau', 'Voiture'];
+        const animatedWord = document.getElementById('animated-word');
+        
+        console.log('Animated word element:', animatedWord);
+        
+        if (!animatedWord) {
+          console.error('Element with id "animated-word" not found');
+          return;
+        }
+        
+        let currentIndex = 0;
+
+        function animateWord() {
+          console.log('Animating word to:', words[(currentIndex + 1) % words.length]);
+          // Sortie du mot actuel
+          animatedWord.classList.add('word-exit');
+          
+          setTimeout(() => {
+            // Changement du mot
+            currentIndex = (currentIndex + 1) % words.length;
+            animatedWord.textContent = words[currentIndex];
+            console.log('Word changed to:', words[currentIndex]);
+            
+            // Entrée du nouveau mot
+            animatedWord.classList.remove('word-exit');
+            animatedWord.classList.add('word-enter');
+            
+            setTimeout(() => {
+              animatedWord.classList.remove('word-enter');
+            }, 500);
+          }, 500);
+        }
+
+        // Lancer l'animation toutes les 3 secondes
+        setInterval(animateWord, 3000);
+        console.log('Animation interval set');
+      });
+    </script>
+    <style>
+      .word-exit {
+        opacity: 0 !important;
+        transform: translateY(-20px) !important;
+        transition: all 0.5s ease !important;
+      }
+      .word-enter {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        transition: all 0.5s ease !important;
+      }
+    </style>
   </body>
 </html>
